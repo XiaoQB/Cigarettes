@@ -1,14 +1,39 @@
 {
-  "pages":[
-    "pages/index/index",
-    "pages/logs/logs"
-  ],
-  "window":{
-    "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
-    "navigationBarTextStyle":"black"
-  },
-  "style": "v2",
-  "sitemapLocation": "sitemap.json"
+    "pages": [
+        "pages/index/index",
+        "pages/more/more"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#0068C4",
+        "navigationBarTitleText": "香烟摆放器",
+        "navigationBarTextStyle": "white",
+        "enablePullDownRefresh": true
+    },
+    "tabBar": {
+        "color": "#626567",
+        "selectedColor": "#2A8CE5",
+        "backgroundColor": "#FBFBFB",
+        "borderStyle": "white",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "",
+                "iconPath": "images/index.png",
+                "selectedIconPath": "images/index_focus.png"
+            },
+            {
+                "pagePath": "pages/more/more",
+                "text": "",
+                "iconPath": "images/burger.png",
+                "selectedIconPath": "images/burger_focus.png"
+            }
+        ]
+    },
+    "networkTimeout": {
+        "request": 10000,
+        "downloadFile": 10000
+    },
+    "debug": true,
+    "sitemapLocation": "sitemap.json"
 }
