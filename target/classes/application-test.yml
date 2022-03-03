@@ -1,0 +1,19 @@
+spring:
+  redis:
+    database: '7'
+    password: 73redis
+    host: 10.141.221.73
+    port: '6379'
+  datasource:
+    druid:
+      filter:
+        config:
+          enabled: 'true'
+      connection-properties: config.decrypt=true;config.decrypt.key=${public-key}
+    name: mysql_druid
+    password: HxUR7gT1dLQwPDUwO0SR02gsJj4wxZHbadojloQt4xRPeSLL0FGgn4qwbwC2+/A3YRw3LgrduBjAbey/MJSqjQ==
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    url: 'jdbc:mysql://10.141.221.73:3306/project?characterEncoding=utf8&useSSL=false&allowMultiQueries=true&autoReconnect=true '
+    type: com.alibaba.druid.pool.DruidDataSource
+public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKG3KtWNiPBAzJQNaG/wnMZpb8gATF2Rr+E84udC2Db35eZEBmD57Hu/3+AHCKY1vw73oDLuve0+u4SKba4M21cCAwEAAQ==

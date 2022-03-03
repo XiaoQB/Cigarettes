@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.io.IOException;
 
 
 @RestController
@@ -19,8 +20,8 @@ public class CigarettesController {
      * 上传文件到指定路径
      */
     @PostMapping
-    public String uploadExcelFile(File cigarettesDetails) {
-            if(cigarettesService.saveFile(cigarettesDetails)){
+    public String uploadExcelFile( ) throws IOException {
+            if(cigarettesService.saveFile()){
                 return "success";
             }else{
                 return "failed";

@@ -1,0 +1,19 @@
+package com.hello.cigarettes.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+/**
+ * @author XiaoQuanbin
+ * @date 2022/3/3
+ */
+@Data
+@AllArgsConstructor
+public class Cigarette {
+    private int sellerId;
+    private String sellerName;
+    private String cigarettesName;
+    private int price;
+    private int orderNum;
+    private String type;
+}
