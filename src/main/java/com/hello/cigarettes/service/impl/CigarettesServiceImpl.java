@@ -4,6 +4,7 @@ package com.hello.cigarettes.service.impl;
 import com.hello.cigarettes.config.Constants;
 import com.hello.cigarettes.dao.CigaretteDao;
 import com.hello.cigarettes.domain.Cigarette;
+import com.hello.cigarettes.domain.CigaretteType;
 import com.hello.cigarettes.service.CigarettesService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -13,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author QuanbinXiao
@@ -40,6 +38,10 @@ public class CigarettesServiceImpl implements CigarettesService {
 
     private CigaretteDao dao;
 
+    List<Cigarette> normalList = new ArrayList<>();
+    List<Cigarette> thinList = new ArrayList<>();
+    List<Cigarette> middleList = new ArrayList<>();
+
     @Override
     public Boolean saveFile( ){
         List<Cigarette> cigarettes = excelToObjectModel();
@@ -49,7 +51,34 @@ public class CigarettesServiceImpl implements CigarettesService {
 
     @Override
     public String getArrangement(String id, int row, int col) {
+        if(row <= 0 || col <= 0){
+            return "cow or row wrong!";
+        }
+        String[][] arrangement = new String[row][col];
+
         List<Cigarette> list = dao.getCigarettesBySellerId(id);
+
+        for(Cigarette c: list){
+            String type = c.getCigaretteType();
+            if(type.equals(CigaretteType.MIDDLE.getType())){
+                middleList.add(c);
+            }else if(type.equals(CigaretteType.THIN.getType())){
+                thinList.add(c);
+            }else if(type.equals(CigaretteType.NORMAL.getType())){
+                normalList.add(c);
+            }else{
+                log.error("some unknown cigarette type!");
+            }
+        }
+
+        sortCigaretteList();
+
+
+        for (Cigarette c: normalList
+             ) {
+            System.out.println(c.getCigaretteName() + ":" + c.getPrice());
+        }
+
         return null;
     }
 
@@ -186,6 +215,23 @@ public class CigarettesServiceImpl implements CigarettesService {
         return cellValue;
     }
 
+    public void sortCigaretteList(){
+            /**
+             * 中支烟由低到高
+             */
+            middleList.sort(Comparator.comparingInt(Cigarette::getPrice));
+
+            /**
+             * 细烟由高到低
+             */
+            thinList.sort((o1, o2) -> Integer.compare(o2.getPrice(), o1.getPrice()));
+
+            /**
+             * 常规烟由高到低
+             */
+            normalList.sort((o1, o2) -> Integer.compare(o2.getPrice(), o1.getPrice()));
+
+    }
 
     @Autowired
     private void setCigaretteDao(CigaretteDao dao){
