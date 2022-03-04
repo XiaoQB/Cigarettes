@@ -15,5 +15,5 @@ public class Cigarette {
     private String cigaretteName;
     private int price;
     private int orderNum;
-    private String type;
+    private String cigaretteType;
 }

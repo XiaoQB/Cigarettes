@@ -14,11 +14,11 @@
 
     <insert id="insertCigarettes" parameterType="List">
         INSERT INTO cigarette
-        (seller_id, seller_name, cigarette_name, price, order_num, type)
+        (seller_id, seller_name, cigarette_name, price, order_num, cigarette_type)
         VALUES
         <foreach collection="list" item="cigarette" separator=",">
             (
-            #{cigarette.seller_id}, #{cigarette.seller_name}, #{cigarette.cigarette_name}, #{cigarette.price}, #{cigarette.order_num}, #{cigarette.type}
+            #{cigarette.sellerId}, #{cigarette.sellerName}, #{cigarette.cigaretteName}, #{cigarette.price}, #{cigarette.orderNum}, #{cigarette.cigaretteType}
             )
         </foreach>
     </insert>
