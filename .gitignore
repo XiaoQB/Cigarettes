@@ -1,4 +1,4 @@
 /target/
 /.idea/
 /Cigarettes.iml
-/src/main/ui2/node_modules/
+/ui2/node_modules/
