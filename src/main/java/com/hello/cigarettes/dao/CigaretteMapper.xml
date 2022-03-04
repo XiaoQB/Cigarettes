@@ -3,13 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hello.cigarettes.dao.CigaretteMapper">
 
-    <resultMap id="" type="Cigarette">
+    <resultMap id="Cigarette" type="com.hello.cigarettes.domain.Cigarette">
         <result property="sellerId" column="seller_id"/>
         <result property="sellerName" column="seller_name"/>
         <result property="cigaretteName" column="cigarette_name"/>
         <result property="price" column="price"/>
         <result property="orderNum" column="order_num"/>
-        <result property="type" column="type"/>
+        <result property="cigaretteType" column="cigarette_type"/>
     </resultMap>
 
     <insert id="insertCigarettes" parameterType="List">
@@ -22,4 +22,8 @@
             )
         </foreach>
     </insert>
+
+    <select id="getCigarettesBySellerId" parameterType="String" resultMap="Cigarette">
+       select * from cigarette where seller_id = #{sellerId};
+    </select>
 </mapper>

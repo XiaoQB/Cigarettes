@@ -49,6 +49,7 @@ public class CigarettesServiceImpl implements CigarettesService {
 
     @Override
     public String getArrangement(String id, int row, int col) {
+        List<Cigarette> list = dao.getCigarettesBySellerId(id);
         return null;
     }
 

@@ -10,6 +10,4 @@ public interface CigarettesService {
 
     String getArrangement(String id, int row, int col);
 
-
-
 }

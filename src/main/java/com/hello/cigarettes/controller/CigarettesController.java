@@ -32,8 +32,8 @@ public class CigarettesController {
      * 输入序列号，行号，列号获得摆放图片
      */
     @GetMapping
-    public Object getArrangement(String id, int raw, int  col) {
-        return cigarettesService.getArrangement(id, raw, col);
+    public Object getArrangement(String id, int row, int  col) {
+        return cigarettesService.getArrangement(id, row, col);
     }
 
     @Autowired
