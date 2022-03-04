@@ -12,7 +12,7 @@ import lombok.Data;
 public class Cigarette {
     private String sellerId;
     private String sellerName;
-    private String cigarettesName;
+    private String cigaretteName;
     private int price;
     private int orderNum;
     private String type;

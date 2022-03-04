@@ -15,8 +15,8 @@ public class CigaretteDao {
 
     private CigaretteMapper mapper;
 
-    public boolean insertCigarette(Cigarette cigarette){
-        return mapper.insertCigarette(cigarette);
+    public boolean insertCigarettes(List<Cigarette> cigarettes){
+        return mapper.insertCigarettes(cigarettes);
     }
 
     public List<Cigarette> getCigarettesBySellerId(int sellerId){

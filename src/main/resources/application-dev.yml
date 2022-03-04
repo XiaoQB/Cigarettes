@@ -1,23 +1,8 @@
 server:
-  port: '8001'
+  port: '8888'
 
 spring:
-  redis:
-    database: '0'
-    password: redis
-    host: 10.176.34.74
-    port: '6379'
   datasource:
-    hikari:
-      maximum-pool-size: 5
-      minimum-idle: 5
-      idle-timeout: 600000
-      connection-timeout: 30000
-      max-lifetime: 1800000
-      pool-name: account-hikari
-    type: com.zaxxer.hikari.HikariDataSource
-    name: mysql_druid
-    password: root
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     url: jdbc:mysql://10.176.34.74:3306/project?&useSSL=false&allowMultiQueries=true&autoReconnect=true
@@ -25,7 +10,7 @@ spring:
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapperLocations: classpath:mapper/*.xml
-  type-aliases-package: cn.edu.fudan.accountservice.domain
+  mapperLocations: classpath:dao/*.xml
+  type-aliases-package: com.hello.cigarettes.domain
 
 

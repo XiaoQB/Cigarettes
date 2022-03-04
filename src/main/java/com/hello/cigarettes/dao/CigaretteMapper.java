@@ -13,9 +13,8 @@ import java.util.List;
  */
 @Repository
 public interface CigaretteMapper {
-    @Insert("insert into cigarette (seller_id, seller_name, cigarette_name, order_num, price, cigarette_type) " +
-            "values (#{},#{},#{},#{},#{},#{})")
-    boolean insertCigarette(Cigarette cigarette);
+
+    boolean insertCigarettes(List<Cigarette> cigarettes);
 
     @Select("select * from cigarettes where seller_id = #{sellerId}")
     List<Cigarette> getCigarettesBySellerId(int sellerId);

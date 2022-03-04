@@ -43,9 +43,7 @@ public class CigarettesServiceImpl implements CigarettesService {
     @Override
     public Boolean saveFile( ){
         List<Cigarette> cigarettes = excelToObjectModel();
-        for (Cigarette c: cigarettes) {
-            dao.insertCigarette(c);
-        }
+        dao.insertCigarettes(cigarettes);
         return true;
     }
 
@@ -189,7 +187,7 @@ public class CigarettesServiceImpl implements CigarettesService {
 
 
     @Autowired
-    public void setCigaretteDao(CigaretteDao dao){
+    private void setCigaretteDao(CigaretteDao dao){
         this.dao = dao;
     }
 }
