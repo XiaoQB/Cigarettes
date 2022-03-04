@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Cigarette {
-    private int sellerId;
+    private String sellerId;
     private String sellerName;
     private String cigarettesName;
     private int price;

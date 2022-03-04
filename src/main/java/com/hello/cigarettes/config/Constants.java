@@ -15,6 +15,7 @@ public class Constants {
     public static final int Col_TestCaseID = 0;
 
     public static final String PATH_TEST_DATA = "./src/main/java/com/junit/selenium/data/data.xlsx";
-    public static final String Sheet_Name = "访销订货情况表(分公司)";
+//    public static final String Sheet_Name = "访销订货情况表(分公司)";
+    public static final String Sheet_Name = "Sheet1";
 
 }

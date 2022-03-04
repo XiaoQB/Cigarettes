@@ -2,12 +2,11 @@ package com.hello.cigarettes.service.impl;
 
 
 import com.hello.cigarettes.config.Constants;
+import com.hello.cigarettes.dao.CigaretteDao;
+import com.hello.cigarettes.domain.Cigarette;
 import com.hello.cigarettes.service.CigarettesService;
-import com.hello.cigarettes.util.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.Entry;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +18,97 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author QuanbinXiao
+ */
 @Slf4j
 @Service
 public class CigarettesServiceImpl implements CigarettesService {
 
+    /**
+     * Excel file path
+     */
+    public static final String PATH = Constants.PATH;
+    /**
+     * 表格列数
+     */
+    public static final int COLUMN_NUMS = 6;
+    /**
+     * 第几个sheet
+     */
+    public static final int SHEET_NUM = 2;
+
+    private CigaretteDao dao;
+
     @Override
-    public Boolean saveFile( ) throws IOException {
-        Workbook wb =null;
-        Sheet sheet = null;
-        Row row = null;
+    public Boolean saveFile( ){
+        List<Cigarette> cigarettes = excelToObjectModel();
+        for (Cigarette c: cigarettes) {
+            dao.insertCigarette(c);
+        }
+        return true;
+    }
+
+    @Override
+    public String getArrangement(String id, int row, int col) {
+        return null;
+    }
+
+    public static List<Cigarette> excelToObjectModel(){
+        List<Map<String,String>> list = getAllCell();
+        List<Cigarette> itemList = new ArrayList<>();
+        for (Map<String,String> map : list) {
+            String sellerId = null;
+            String sellerName = null;
+            String cigaretteName = null;
+            String priceString = null;
+            String orderNumString = null;
+            String type = null;
+
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                switch (entry.getKey()){
+                    case "1" : sellerId = entry.getValue();
+                    case "2" : sellerName = entry.getValue();
+                    case "3" : cigaretteName = entry.getValue();
+                    case "4" : orderNumString  = entry.getValue();
+                    case "5" : priceString = entry.getValue();
+                    case "6" : type = entry.getValue();
+                    default: break;
+                }
+            }
+            assert priceString !=null;
+            int price = (int)Float.parseFloat(priceString);
+            assert orderNumString !=null;
+            int orderNum = (int)Float.parseFloat(orderNumString);
+            if(orderNum == 0){
+                continue;
+            }
+            if("".equals(type)){
+                continue;
+            }
+            itemList.add(new Cigarette(sellerId, sellerName, cigaretteName,price
+                    ,orderNum,type));
+        }
+        return itemList;
+
+    }
+
+    public static List<Map<String,String>> getAllCell(){
+        Workbook wb;
+        Sheet sheet;
+        Row row;
         List<Map<String,String>> list = null;
-        String cellData = null;
-        String filePath = Constants.PATH;
-        String columns[] = {"name","age","score","4","5","6", "7", "8"};
-        wb = readExcel(filePath);
+        String cellData;
+        String[] columns = new String[COLUMN_NUMS];
+        for (int i = 0; i < COLUMN_NUMS; i++) {
+            columns[i] = i+1+"";
+        }
+        wb = readExcel();
         if(wb != null){
             //用来存放表中数据
-            list = new ArrayList<Map<String,String>>();
+            list = new ArrayList<>();
             //获取第一个sheet
-            sheet = wb.getSheetAt(0);
+            sheet = wb.getSheetAt(SHEET_NUM - 1 );
             //获取最大行数
             int rownum = sheet.getPhysicalNumberOfRows();
             //获取第一行
@@ -45,7 +116,7 @@ public class CigarettesServiceImpl implements CigarettesService {
             //获取最大列数
             int colnum = row.getPhysicalNumberOfCells();
             for (int i = 1; i<rownum; i++) {
-                Map<String,String> map = new LinkedHashMap<String,String>();
+                Map<String,String> map = new LinkedHashMap<>();
                 row = sheet.getRow(i);
                 if(row !=null){
                     for (int j=0;j<colnum;j++){
@@ -58,25 +129,15 @@ public class CigarettesServiceImpl implements CigarettesService {
                 list.add(map);
             }
         }
-        //遍历解析出来的list
-        for (Map<String,String> map : list) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                System.out.print(entry.getKey()+":"+entry.getValue()+",");
-            }
-            System.out.println();
-        }
-        return true;
+        return list;
     }
-    //读取excel
-    public static Workbook readExcel(String filePath){
+
+    public static Workbook readExcel(){
         Workbook wb = null;
-        if(filePath==null){
-            return null;
-        }
-        String extString = filePath.substring(filePath.lastIndexOf("."));
-        InputStream is = null;
+        String extString = PATH.substring(PATH.lastIndexOf("."));
+        InputStream is;
         try {
-            is = new FileInputStream(filePath);
+            is = new FileInputStream(PATH);
             if(".xls".equals(extString)){
                 return wb = new HSSFWorkbook(is);
             }else if(".xlsx".equals(extString)){
@@ -93,9 +154,8 @@ public class CigarettesServiceImpl implements CigarettesService {
         return wb;
     }
 
-
     public static Object getCellFormatValue(Cell cell){
-        Object cellValue = null;
+        Object cellValue;
         if(cell!=null){
             //判断cell类型
             switch(cell.getCellType()){
@@ -128,8 +188,8 @@ public class CigarettesServiceImpl implements CigarettesService {
     }
 
 
-    @Override
-    public String getArrangement(String id, int row, int col) {
-        return null;
+    @Autowired
+    public void setCigaretteDao(CigaretteDao dao){
+        this.dao = dao;
     }
 }
