@@ -50,9 +50,9 @@ public class CigarettesServiceImpl implements CigarettesService {
     }
 
     @Override
-    public String getArrangement(String id, int row, int col) {
+    public String[][] getArrangement(String id, int row, int col) {
         if(row <= 0 || col <= 0){
-            return "cow or row wrong!";
+            log.error("cow or row wrong!");
         }
         String[][] arrangement = new String[row][col];
 
@@ -73,13 +73,38 @@ public class CigarettesServiceImpl implements CigarettesService {
 
         sortCigaretteList();
 
-
+        //从左上到右下： middle由低到高 thin中间高 normal从高到低
+        log.info("normal");
         for (Cigarette c: normalList
-             ) {
+        ) {
+            System.out.println(c.getCigaretteName() + ":" + c.getPrice());
+        }
+        log.info("thinList");
+
+        for (Cigarette c: thinList
+        ) {
+            System.out.println(c.getCigaretteName() + ":" + c.getPrice());
+        }
+        log.info("middle");
+        for (Cigarette c: middleList
+        ) {
             System.out.println(c.getCigaretteName() + ":" + c.getPrice());
         }
 
-        return null;
+        int middleSize = middleList.size();
+        if(middleSize == 1){
+            arrangement[0][1] = middleList.get(0).getCigaretteName();
+            arrangement[0][2] = middleList.get(0).getCigaretteName();
+            arrangement[0][3] = middleList.get(0).getCigaretteName();
+         }
+        int colNum = middleSize / row;
+        int count = 0;
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < colNum; j++){
+                arrangement[i][j] = middleList.get(count >= middleList.size() ? count++ : middleList.size()).getCigaretteName();
+            }
+        }
+        return arrangement;
     }
 
     public static List<Cigarette> excelToObjectModel(){
@@ -222,7 +247,7 @@ public class CigarettesServiceImpl implements CigarettesService {
             middleList.sort(Comparator.comparingInt(Cigarette::getPrice));
 
             /**
-             * 细烟由高到低
+             * 细烟由低到高再到低，这里先按照高到低
              */
             thinList.sort((o1, o2) -> Integer.compare(o2.getPrice(), o1.getPrice()));
 
