@@ -35,6 +35,7 @@ public class CigarettesServiceImpl implements CigarettesService {
      * 第几个sheet
      */
     public static final int SHEET_NUM = 2;
+    public static final int MAX_DUPLICATE = 3;
 
     private CigaretteDao dao;
 
@@ -51,13 +52,23 @@ public class CigarettesServiceImpl implements CigarettesService {
 
     @Override
     public String[][] getArrangement(String id, int row, int col) {
-        if(row <= 0 || col <= 0){
+        if(row <= 1 || col <= 1){
             log.error("cow or row wrong!");
         }
         String[][] arrangement = new String[row][col];
 
         List<Cigarette> list = dao.getCigarettesBySellerId(id);
 
+        // 已有香烟无法摆满展柜
+        int totalSize = row * col;
+        int cigaretteSize = list.size();
+        if(totalSize > MAX_DUPLICATE * cigaretteSize){
+            log.error("展柜数量过大，请重新输入行号和列号");
+            arrangement[0][0] = "展柜数量过大，请重新输入行号和列号";
+            return arrangement;
+        }
+
+        // 完成三种香烟类型的分类
         for(Cigarette c: list){
             String type = c.getCigaretteType();
             if(type.equals(CigaretteType.MIDDLE.getType())){
@@ -74,6 +85,47 @@ public class CigarettesServiceImpl implements CigarettesService {
         sortCigaretteList();
 
         //从左上到右下： middle由低到高 thin中间高 normal从高到低
+//        printAllList();
+
+
+        // 各香烟类型数量
+        int middleListSize = middleList.size();
+        int thinListSize = thinList.size();
+        int normalListSize = normalList.size();
+
+        // 按比例计算各类型香烟需要填充的格子数
+        int middleArraySize = Math.round((float)middleListSize/cigaretteSize * totalSize);
+        int thinArraySize = Math.round((float)thinListSize/cigaretteSize * totalSize);
+        int normalArraySize = totalSize - thinArraySize -middleArraySize;
+
+        // 填充list到需要的标准
+        int m = 0;
+        while(middleList.size() != middleArraySize){
+            middleList.add(m++ % middleList.size(), middleList.get(m));
+        }
+        m = 0;
+        while(thinList.size() != thinArraySize){
+            thinList.add(m++ % thinList.size(), thinList.get(m));
+        }
+        m = 0;
+        while(normalList.size() != normalArraySize){
+            normalList.add(m++ % normalList.size(), normalList.get(m));
+        }
+//        printAllList();
+        sortCigaretteList();
+
+        middleList.addAll(thinList);
+        middleList.addAll(normalList);
+        int count = 0;
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                arrangement[i][j] = middleList.get(count++).getCigaretteName();
+            }
+        }
+        return arrangement;
+    }
+
+    public void printAllList(){
         log.info("normal");
         for (Cigarette c: normalList
         ) {
@@ -90,21 +142,6 @@ public class CigarettesServiceImpl implements CigarettesService {
         ) {
             System.out.println(c.getCigaretteName() + ":" + c.getPrice());
         }
-
-        int middleSize = middleList.size();
-        if(middleSize == 1){
-            arrangement[0][1] = middleList.get(0).getCigaretteName();
-            arrangement[0][2] = middleList.get(0).getCigaretteName();
-            arrangement[0][3] = middleList.get(0).getCigaretteName();
-         }
-        int colNum = middleSize / row;
-        int count = 0;
-        for(int i = 0; i < row; i++){
-            for(int j = 0; j < colNum; j++){
-                arrangement[i][j] = middleList.get(count >= middleList.size() ? count++ : middleList.size()).getCigaretteName();
-            }
-        }
-        return arrangement;
     }
 
     public static List<Cigarette> excelToObjectModel(){
