@@ -10,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.xmlbeans.impl.jam.mutable.MField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
@@ -39,10 +41,23 @@ public class CigarettesServiceImpl implements CigarettesService {
     public static final int MAX_DUPLICATE = 3;
 
     private CigaretteDao dao;
-
+    /**
+     *存储的文件路径
+     */
+    public static final String STORAGE_PATH = "";
 
     @Override
-    public Boolean saveFile(File file){
+    public Boolean saveFile(MultipartFile file){
+        String fileName = file.getOriginalFilename();
+        String filePath = PATH.substring(0,PATH.lastIndexOf('/') + 1);
+        assert fileName != null;
+        File loadFile = new File(filePath , fileName);
+        try{
+            file.transferTo(loadFile);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         List<Cigarette> cigarettes = excelToObjectModel();
         dao.insertCigarettes(cigarettes);
         return true;

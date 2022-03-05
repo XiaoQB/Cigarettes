@@ -1,18 +1,24 @@
 <template>
-
- <div>
-   <el-upload
-       class="upload-demo"
-       action=""
-       auto-upload
-       :before-upload="beforeAvatarUpload"
-       :http-request="handleUpload"
-       :file-list="fileList"
-       >
-     <el-button size="small" type="primary">上传excel文件</el-button>
-     <div slot="tip" class="el-upload__tip">xls/xlsx/csv 文件才可以上传</div>
-   </el-upload>
- </div>
+  <el-container>
+    <el-header>上传订货情况表</el-header>
+    <el-main>
+      <div>
+        <el-upload
+            class="upload-demo"
+            action="/api/cigarettes"
+            auto-upload
+            :before-upload="beforeAvatarUpload"
+            :on-success="handleSuccess"
+            :on-error="handleError"
+            :file-list="fileList"
+        >
+          <el-button size="big" type="primary">上传excel文件</el-button>
+          <div slot="tip" class="el-upload__tip">xls/xlsx/csv 文件才可以上传</div>
+        </el-upload>
+      </div>
+    </el-main>
+<!--    <el-footer>Footer</el-footer>-->
+  </el-container>
 
 </template>
 
@@ -31,14 +37,12 @@ export default {
       console.log(file)
       let form = new FormData();
       form.append('file', file);
-      //form.append('type', this.type);
-      this.axios({
-        method:"post",
-        url: "sdg",//这里写后端的地址
-        headers:{
-          'Content-type': 'multipart/form-data'
+      this.axios.post("/api/cigarettes", form,{
+        // url: "/api/cigarettes",//这里写后端的地址
+        headers: {
+          'Content-Type': 'multipart/form-data'
         },
-        data:form
+        // data:form
       }).then(
           res=>{
             if(res.data.code===200){
@@ -62,10 +66,33 @@ export default {
 
       return (isXLSX || isXLS || isCSV);
     },
+    handleSuccess(){
+      this.$message.success("上传成功")
+    },
+    handleError(){
+      this.$message.error("上传失败")
+    }
   }
 }
 </script>
 
 <style scoped>
+
+.el-header {
+  background-color: #d1cbb3;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+.el-main{
+  margin-top: 100px;
+}
+.el-footer{
+  background-color: #B3C0D1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+  margin-bottom: 200px;
+}
 
 </style>
