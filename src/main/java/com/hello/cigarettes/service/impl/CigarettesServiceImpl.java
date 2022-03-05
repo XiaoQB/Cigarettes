@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author QuanbinXiao
@@ -39,9 +40,6 @@ public class CigarettesServiceImpl implements CigarettesService {
 
     private CigaretteDao dao;
 
-    List<Cigarette> normalList = new ArrayList<>();
-    List<Cigarette> thinList = new ArrayList<>();
-    List<Cigarette> middleList = new ArrayList<>();
 
     @Override
     public Boolean saveFile( ){
@@ -52,6 +50,10 @@ public class CigarettesServiceImpl implements CigarettesService {
 
     @Override
     public String[][] getArrangement(String id, int row, int col) {
+        List<Cigarette> normalList = new CopyOnWriteArrayList<>();
+        List<Cigarette> thinList = new CopyOnWriteArrayList<>();
+        List<Cigarette> middleList = new CopyOnWriteArrayList<>();
+
         if(row <= 1 || col <= 1){
             log.error("cow or row wrong!");
         }
@@ -82,10 +84,10 @@ public class CigarettesServiceImpl implements CigarettesService {
             }
         }
 
-        sortCigaretteList();
+        sortCigaretteList(normalList, thinList, middleList);
 
         //从左上到右下： middle由低到高 thin中间高 normal从高到低
-//        printAllList();
+//        printAllList(normalList, thinList, middleList);
 
 
         // 各香烟类型数量
@@ -97,22 +99,30 @@ public class CigarettesServiceImpl implements CigarettesService {
         int middleArraySize = Math.round((float)middleListSize/cigaretteSize * totalSize);
         int thinArraySize = Math.round((float)thinListSize/cigaretteSize * totalSize);
         int normalArraySize = totalSize - thinArraySize -middleArraySize;
+        if(normalArraySize < 0){
+            arrangement[0][0] = "展柜尺寸不够";
+            return arrangement;
+        }
 
         // 填充list到需要的标准
         int m = 0;
+
         while(middleList.size() != middleArraySize){
-            middleList.add(m++ % middleList.size(), middleList.get(m));
+            Cigarette c = middleList.get(m);
+            middleList.add(m++ % middleListSize, c);
         }
         m = 0;
         while(thinList.size() != thinArraySize){
-            thinList.add(m++ % thinList.size(), thinList.get(m));
+            Cigarette c = thinList.get(m);
+            thinList.add(m++ % thinListSize, c);
         }
         m = 0;
         while(normalList.size() != normalArraySize){
-            normalList.add(m++ % normalList.size(), normalList.get(m));
+            Cigarette c = normalList.get(m);
+            normalList.add(m++ % normalListSize, c);
         }
-//        printAllList();
-        sortCigaretteList();
+//        printAllList(normalList, thinList, middleList);
+        sortCigaretteList(normalList, thinList, middleList);
 
         middleList.addAll(thinList);
         middleList.addAll(normalList);
@@ -125,7 +135,7 @@ public class CigarettesServiceImpl implements CigarettesService {
         return arrangement;
     }
 
-    public void printAllList(){
+    public void printAllList(List<Cigarette> normalList, List<Cigarette> thinList, List<Cigarette> middleList){
         log.info("normal");
         for (Cigarette c: normalList
         ) {
@@ -277,7 +287,7 @@ public class CigarettesServiceImpl implements CigarettesService {
         return cellValue;
     }
 
-    public void sortCigaretteList(){
+    public void sortCigaretteList(List<Cigarette> normalList, List<Cigarette> thinList, List<Cigarette> middleList){
             /**
              * 中支烟由低到高
              */
