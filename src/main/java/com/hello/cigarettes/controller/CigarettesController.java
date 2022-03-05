@@ -24,16 +24,22 @@ public class CigarettesController {
      * 上传文件到指定路径
      */
     @PostMapping
-    @ResponseBody
-    public ResponseBean<String> uploadExcelFile(HttpServletRequest request) throws IOException {
-        MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
-        MultipartFile file = params.getFile("file");
-
+    public ResponseBean<String> uploadExcelFile(@RequestParam("file") Object object) throws IOException {
+        System.out.println(object);
+        MultipartFile file = (MultipartFile) object;
+            try{
+                if(file != null){
+                    System.out.println("asd");
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             if(cigarettesService.saveFile(file)){
                 return new ResponseBean<>(200, "success", null);
             }else{
                 return new ResponseBean<>(400, "failed", null);
             }
+       // return new ResponseBean<>(200, "success", null);
     }
 
     /**

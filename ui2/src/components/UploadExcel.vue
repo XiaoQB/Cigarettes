@@ -1,14 +1,15 @@
 <template>
   <el-container>
-    <el-header>Header</el-header>
+    <el-header>上传订货情况表</el-header>
     <el-main>
       <div>
         <el-upload
             class="upload-demo"
-            action
+            action="/api/cigarettes"
             auto-upload
             :before-upload="beforeAvatarUpload"
-            :http-request="handleUpload"
+            :on-success="handleSuccess"
+            :on-error="handleError"
             :file-list="fileList"
         >
           <el-button size="big" type="primary">上传excel文件</el-button>
@@ -36,7 +37,6 @@ export default {
       console.log(file)
       let form = new FormData();
       form.append('file', file);
-      console.log(file)
       this.axios.post("/api/cigarettes", form,{
         // url: "/api/cigarettes",//这里写后端的地址
         headers: {
@@ -66,6 +66,12 @@ export default {
 
       return (isXLSX || isXLS || isCSV);
     },
+    handleSuccess(){
+      this.$message.success("上传成功")
+    },
+    handleError(){
+      this.$message.error("上传失败")
+    }
   }
 }
 </script>

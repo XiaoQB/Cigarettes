@@ -1,6 +1,7 @@
 <template>
   <el-container>
     <el-header>
+      输入编号和行列获得香烟摆放方式
     </el-header>
     <el-main>
       <el-form  label-width="100px" :model="formParams">
@@ -17,6 +18,8 @@
           <el-button type="primary" plain @click="getList()">提交</el-button>
         </el-form-item>
       </el-form>
+
+      <el-divider></el-divider>
 
       <el-table
           :data="formList"
@@ -60,7 +63,6 @@ export default {
       }).then((response)=>{
         if(response.data.code === 200){
           this.formList = response.data.data
-          console.log(this.formList)
           this.$message({
             type:"success",
             message:"生成成功"
@@ -83,7 +85,7 @@ export default {
 
 .el-header {
   background-color: #d1cbb3;
-  color: #333;
+  color: #091001;
   text-align: center;
   line-height: 60px;
 }
