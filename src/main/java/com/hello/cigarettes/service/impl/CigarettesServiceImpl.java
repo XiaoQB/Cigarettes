@@ -10,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.xmlbeans.impl.jam.mutable.MField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
@@ -42,7 +44,14 @@ public class CigarettesServiceImpl implements CigarettesService {
 
 
     @Override
-    public Boolean saveFile(File file){
+    public Boolean saveFile(MultipartFile file){
+        String fileName = file.getName();
+        File loadFile = new File("/Users/keyon/Documents/研一下/" , fileName);
+        try{
+            file.transferTo(loadFile);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         List<Cigarette> cigarettes = excelToObjectModel();
         dao.insertCigarettes(cigarettes);
         return true;
