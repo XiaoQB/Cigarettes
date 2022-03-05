@@ -54,8 +54,8 @@ public class CigarettesServiceImpl implements CigarettesService {
         List<Cigarette> thinList = new CopyOnWriteArrayList<>();
         List<Cigarette> middleList = new CopyOnWriteArrayList<>();
 
-        if(row <= 1 || col <= 1){
-            log.error("cow or row wrong!");
+        if(row < 3 || col < 10){
+            log.error("cow or row not enough!");
         }
         String[][] arrangement = new String[row][col];
 
@@ -124,13 +124,74 @@ public class CigarettesServiceImpl implements CigarettesService {
 //        printAllList(normalList, thinList, middleList);
         sortCigaretteList(normalList, thinList, middleList);
 
-        middleList.addAll(thinList);
-        middleList.addAll(normalList);
-        int count = 0;
-        for(int i = 0; i < row; i++){
-            for(int j = 0; j < col; j++){
-                arrangement[i][j] = middleList.get(count++).getCigaretteName();
+        // 先从左到右放middle烟
+        int middleColNum;
+        if(middleArraySize % row == 0){
+            middleColNum = middleArraySize/row;
+            for (int i = 0; i < row ; i++) {
+                for (int j = 0; j < middleColNum; j++) {
+                    if(middleList.size() == 0){
+                        break;
+                    }
+                    arrangement[i][j] = middleList.get(0).getCigaretteName();
+                    middleList.remove(0);
+                    break;
+                }
             }
+        }else{
+            middleColNum = middleArraySize/row + 1;
+           for (int i = 0; i < row ; i++) {
+               for (int j = 0; j < middleColNum; j++) {
+                   if(middleList.size() == 0){
+                       break;
+                   }
+                   arrangement[i][j] = middleList.get(0).getCigaretteName();
+                   middleList.remove(0);
+                   break;
+               }
+           }
+       }
+
+        // 再从右到左放normal烟
+        int normalColNum;
+        if(normalArraySize % row == 0){
+            normalColNum = normalArraySize/row;
+            for (int i = 0; i < row ; i++) {
+                for (int j = col - 1; j > col - normalColNum; j--) {
+                    if(normalList.size() == 0){
+                        break;
+                    }
+                    arrangement[i][j] = normalList.get(0).getCigaretteName();
+                    normalList.remove(0);
+                    break;
+                }
+            }
+        }else{
+            normalColNum = normalArraySize/row + 1;
+            for (int i = 0; i < row ; i++) {
+                for (int j = col-1; j > col - normalColNum; j--) {
+                    if(normalList.size() == 0){
+                        break;
+                    }
+                    arrangement[i][j] = normalList.get(0).getCigaretteName();
+                    normalList.remove(0);
+                }
+            }
+        }
+
+        // 将细烟填充空位
+            for (int i = 0; i < row ; i++) {
+                for (int j = 0; j < col; j++) {
+                   if(arrangement[i][j] == null){
+                       if(thinList.size() == 0){
+                           break;
+                       }
+                       arrangement[i][j] = thinList.get(0).getCigaretteName();
+                       thinList.remove(0);
+                       break;
+                   }
+                }
+                break;
         }
         return arrangement;
     }
