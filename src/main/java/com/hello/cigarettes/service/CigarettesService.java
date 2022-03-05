@@ -6,10 +6,8 @@ import java.io.IOException;
 public interface CigarettesService {
 
 
-    Boolean saveFile( ) throws IOException;
+    Boolean saveFile(File file) throws IOException;
 
-    String getArrangement(String id, int row, int col);
-
-
+    String[][] getArrangement(String id, int row, int col);
 
 }

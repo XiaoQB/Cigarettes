@@ -19,7 +19,7 @@ public class CigaretteDao {
         return mapper.insertCigarettes(cigarettes);
     }
 
-    public List<Cigarette> getCigarettesBySellerId(int sellerId){
+    public List<Cigarette> getCigarettesBySellerId(String sellerId){
         return mapper.getCigarettesBySellerId(sellerId);
     }
 
