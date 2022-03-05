@@ -8,10 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpRequest;
 
 
 @RestController
@@ -26,9 +24,11 @@ public class CigarettesController {
      * 上传文件到指定路径
      */
     @PostMapping
-    public ResponseBean<String> uploadExcelFile( HttpServletRequest request) throws IOException {
-        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        MultipartFile file = multipartRequest.getFile("file");
+    @ResponseBody
+    public ResponseBean<String> uploadExcelFile(HttpServletRequest request) throws IOException {
+        MultipartHttpServletRequest params=((MultipartHttpServletRequest) request);
+        MultipartFile file = params.getFile("file");
+
             if(cigarettesService.saveFile(file)){
                 return new ResponseBean<>(200, "success", null);
             }else{

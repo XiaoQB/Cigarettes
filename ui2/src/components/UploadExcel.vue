@@ -5,7 +5,7 @@
       <div>
         <el-upload
             class="upload-demo"
-            action=""
+            action
             auto-upload
             :before-upload="beforeAvatarUpload"
             :http-request="handleUpload"
@@ -37,13 +37,12 @@ export default {
       let form = new FormData();
       form.append('file', file);
       console.log(file)
-      this.axios({
-        method:"post",
-        url: "/api/cigarettes",//这里写后端的地址
+      this.axios.post("/api/cigarettes", form,{
+        // url: "/api/cigarettes",//这里写后端的地址
         headers: {
           'Content-Type': 'multipart/form-data'
         },
-        data:form
+        // data:form
       }).then(
           res=>{
             if(res.data.code===200){
