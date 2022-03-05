@@ -20,8 +20,8 @@ public class CigarettesController {
      * 上传文件到指定路径
      */
     @PostMapping
-    public String uploadExcelFile( ) throws IOException {
-            if(cigarettesService.saveFile()){
+    public String uploadExcelFile(File file) throws IOException {
+            if(cigarettesService.saveFile(file)){
                 return "success";
             }else{
                 return "failed";

@@ -42,7 +42,7 @@ public class CigarettesServiceImpl implements CigarettesService {
 
 
     @Override
-    public Boolean saveFile( ){
+    public Boolean saveFile(File file){
         List<Cigarette> cigarettes = excelToObjectModel();
         dao.insertCigarettes(cigarettes);
         return true;
