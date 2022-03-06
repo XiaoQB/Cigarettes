@@ -15,4 +15,6 @@ public interface CigaretteMapper {
     boolean insertCigarettes(List<Cigarette> cigarettes);
 
     List<Cigarette> getCigarettesBySellerId(String sellerId);
+
+    void deleteData();
 }

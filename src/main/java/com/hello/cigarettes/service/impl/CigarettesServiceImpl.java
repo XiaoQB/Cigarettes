@@ -40,7 +40,7 @@ public class CigarettesServiceImpl implements CigarettesService {
     public static final int SHEET_NUM = 2;
     public static final int MAX_DUPLICATE = 3;
 
-    private CigaretteDao dao;
+    private CigaretteDao cigaretteDao;
     /**
      *存储的文件路径
      */
@@ -57,9 +57,10 @@ public class CigarettesServiceImpl implements CigarettesService {
         }catch (Exception e){
             e.printStackTrace();
         }
+        cigaretteDao.deleteData();
 
         List<Cigarette> cigarettes = excelToObjectModel();
-        dao.insertCigarettes(cigarettes);
+        cigaretteDao.insertCigarettes(cigarettes);
         return true;
     }
 
@@ -74,7 +75,7 @@ public class CigarettesServiceImpl implements CigarettesService {
         }
         String[][] arrangement = new String[row][col];
 
-        List<Cigarette> list = dao.getCigarettesBySellerId(id);
+        List<Cigarette> list = cigaretteDao.getCigarettesBySellerId(id);
 
         // 已有香烟无法摆满展柜
         int totalSize = row * col;
@@ -321,7 +322,7 @@ public class CigarettesServiceImpl implements CigarettesService {
     }
 
     @Autowired
-    private void setCigaretteDao(CigaretteDao dao){
-        this.dao = dao;
+    private void setCigaretteDao(CigaretteDao cigaretteDao){
+        this.cigaretteDao = cigaretteDao;
     }
 }

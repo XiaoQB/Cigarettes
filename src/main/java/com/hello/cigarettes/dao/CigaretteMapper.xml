@@ -26,4 +26,8 @@
     <select id="getCigarettesBySellerId" parameterType="String" resultMap="Cigarette">
        select * from cigarette where seller_id = #{sellerId};
     </select>
+
+    <update id="deleteData">
+        truncate table cigarette
+    </update>
 </mapper>

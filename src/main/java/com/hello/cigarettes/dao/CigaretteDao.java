@@ -13,18 +13,21 @@ import java.util.List;
 @Repository
 public class CigaretteDao {
 
-    private CigaretteMapper mapper;
+    private CigaretteMapper cigaretteMapper;
 
     public boolean insertCigarettes(List<Cigarette> cigarettes){
-        return mapper.insertCigarettes(cigarettes);
+        return cigaretteMapper.insertCigarettes(cigarettes);
+    }
+    public void deleteData(){
+        cigaretteMapper.deleteData();
     }
 
     public List<Cigarette> getCigarettesBySellerId(String sellerId){
-        return mapper.getCigarettesBySellerId(sellerId);
+        return cigaretteMapper.getCigarettesBySellerId(sellerId);
     }
 
     @Autowired
     public void setCigaretteMapper(CigaretteMapper mapper){
-        this.mapper = mapper;
+        this.cigaretteMapper = mapper;
     }
 }

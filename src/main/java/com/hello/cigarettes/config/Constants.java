@@ -8,7 +8,7 @@ public class Constants {
     /**
      * 文件路径
      */
-    public static final String PATH ="/Users/xiaoqb/Desktop/访销订货情况表.xls";
+    public static final String PATH ="/data/访销订货情况表.xls";
     /**
      * data.xlsx中一些单元格的索引值
      */
