@@ -103,8 +103,6 @@ public class CigarettesServiceImpl implements CigarettesService {
         sortCigaretteList(normalList, thinList, middleList);
 
         //从左上到右下： middle由低到高 thin中间高 normal从高到低
-        printAllList(normalList, thinList, middleList);
-        System.out.println("middle " + middleList.size()+ "thin "+ thinList.size() + "normal " + normalList.size());
 
         // 各香烟类型数量
         int middleListSize = middleList.size();
@@ -124,12 +122,12 @@ public class CigarettesServiceImpl implements CigarettesService {
         int m = 0;
 
         while(middleList.size() != middleArraySize){
-            Cigarette c = normalList.get(m++ % normalListSize);
+            Cigarette c = middleList.get(m++ % normalListSize);
             middleList.add(c);
         }
         m = 0;
         while(thinList.size() != thinArraySize){
-            Cigarette c = normalList.get(m++ % normalListSize);
+            Cigarette c = thinList.get(m++ % normalListSize);
             thinList.add(c);
         }
         m = 0;
@@ -137,10 +135,9 @@ public class CigarettesServiceImpl implements CigarettesService {
             Cigarette c = normalList.get(m++ % normalListSize);
             normalList.add(c);
         }
+//        System.out.println("middle " + middleList.size()+ "thin "+ thinList.size() + "normal " + normalList.size());
         sortCigaretteList(normalList, thinList, middleList);
 
-        printAllList(normalList, thinList, middleList);
-        System.out.println("middle " + middleList.size()+ "thin "+ thinList.size() + "normal " + normalList.size());
 
         // 先从左到右放middle烟
         int middleColNum;
@@ -155,25 +152,35 @@ public class CigarettesServiceImpl implements CigarettesService {
                     break;
                 }
                 arrangement[i][j] = middleList.get(0).getCigaretteName();
+//                arrangement[i][j] = middleList.get(0).getCigaretteName()+"/"+ middleList.get(0).getCigaretteType() +"/"+ middleList.get(0).getPrice();
                 middleList.remove(0);
             }
         }
 
-        // 再从右到左放normal烟
+        // 再从右边开始 从左到右放normal烟
         int normalColNum;
         if(normalArraySize % row == 0){
             normalColNum = normalArraySize/row;
         }else{
             normalColNum = normalArraySize/row + 1;
         }
-        for (int i = 0; i < row ; i++) {
-            for (int j = col-1; j >= col - normalColNum; j--) {
-                if(normalList.size() == 0){
+        for (int i = 0; i < row -1; i++) {
+            for (int j = col - normalColNum; j < col ; j++) {
+                if(normalList.size() == 0 || arrangement[i][j] != null){
                     break;
                 }
                 arrangement[i][j] = normalList.get(0).getCigaretteName();
                 normalList.remove(0);
             }
+        }
+
+        // normal 最后一列需要单独从左往右摆放
+        for (int j = col - normalList.size(); j < col; j++) {
+            if(normalList.size() == 0 || arrangement[row - 1][j] != null){
+                break;
+            }
+            arrangement[row -1][j] = normalList.get(0).getCigaretteName();
+            normalList.remove(0);
         }
 
         // 将细烟填充空位, 分成两个序列，是顺序与逆序，依次填充。
@@ -189,8 +196,6 @@ public class CigarettesServiceImpl implements CigarettesService {
         thinStr1.sort(Comparator.comparingInt(Cigarette::getPrice));
         // 由高到低
         thinStr2.sort((o1, o2) -> Integer.compare(o2.getPrice(), o1.getPrice()));
-//        System.out.println(thinStr1);
-//        System.out.println(thinStr2);
             for (int i = 0; i < row ; i++) {
                 for (int j = 0; j < col; j++) {
                    if(arrangement[i][j] == null){
@@ -207,7 +212,6 @@ public class CigarettesServiceImpl implements CigarettesService {
                    }
                 }
         }
-//        System.out.println("middle " + middleList.size()+ "thin "+ thinList.size() + "normal " + normalList.size());
         return arrangement;
     }
 
