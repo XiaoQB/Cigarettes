@@ -5,7 +5,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
-    url: jdbc:mysql://10.176.34.74:3306/project?&useSSL=false&allowMultiQueries=true&autoReconnect=true
+    url: jdbc:mysql://47.98.170.147:3306/project?&useSSL=false&allowMultiQueries=true&autoReconnect=true
+    password: Rroot123456!
 
 mybatis:
   configuration:
