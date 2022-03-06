@@ -1,0 +1,2 @@
+#!/bin/bash
+docker built -t cigarete:v1 .

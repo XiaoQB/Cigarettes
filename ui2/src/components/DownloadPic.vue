@@ -59,7 +59,7 @@ export default {
     getList(){
       this.axios({
         method:"get",
-        url:`api/cigarettes?id=${this.formParams.id}&row=${this.formParams.row}&col=${this.formParams.col}`
+        url:`http://127.0.0.1:8888/cigarettes?id=${this.formParams.id}&row=${this.formParams.row}&col=${this.formParams.col}`
       }).then((response)=>{
         if(response.data.code === 200){
           this.formList = response.data.data

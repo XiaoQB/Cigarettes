@@ -25,7 +25,6 @@ public class CigarettesController {
      */
     @PostMapping
     public ResponseBean<String> uploadExcelFile(@RequestParam("file") Object object) throws IOException {
-        System.out.println(object);
         MultipartFile file = (MultipartFile) object;
             try{
                 if(file != null){
