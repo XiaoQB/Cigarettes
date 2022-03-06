@@ -151,8 +151,8 @@ public class CigarettesServiceImpl implements CigarettesService {
                 if(middleList.size() == 0){
                     break;
                 }
-                arrangement[i][j] = middleList.get(0).getCigaretteName();
-//                arrangement[i][j] = middleList.get(0).getCigaretteName()+"/"+ middleList.get(0).getCigaretteType() +"/"+ middleList.get(0).getPrice();
+//                arrangement[i][j] = middleList.get(0).getCigaretteName();
+                arrangement[i][j] = middleList.get(0).getCigaretteName()+"/"+ middleList.get(0).getCigaretteType() +"/"+ middleList.get(0).getPrice();
                 middleList.remove(0);
             }
         }
@@ -169,7 +169,9 @@ public class CigarettesServiceImpl implements CigarettesService {
                 if(normalList.size() == 0 || arrangement[i][j] != null){
                     break;
                 }
-                arrangement[i][j] = normalList.get(0).getCigaretteName();
+//                arrangement[i][j] = normalList.get(0).getCigaretteName();
+                arrangement[i][j] = normalList.get(0).getCigaretteName()+"/"+ normalList.get(0).getCigaretteType() +"/"+ normalList.get(0).getPrice();
+
                 normalList.remove(0);
             }
         }
@@ -179,7 +181,8 @@ public class CigarettesServiceImpl implements CigarettesService {
             if(normalList.size() == 0 || arrangement[row - 1][j] != null){
                 break;
             }
-            arrangement[row -1][j] = normalList.get(0).getCigaretteName();
+//            arrangement[row -1][j] = normalList.get(0).getCigaretteName();
+            arrangement[row -1][j] = normalList.get(0).getCigaretteName()+"/"+ normalList.get(0).getCigaretteType() +"/"+ normalList.get(0).getPrice();
             normalList.remove(0);
         }
 
@@ -203,10 +206,12 @@ public class CigarettesServiceImpl implements CigarettesService {
                            if(thinStr2.size() == 0){
                                break;
                            }
-                           arrangement[i][j] = thinStr2.get(0).getCigaretteName();
+//                           arrangement[i][j] = thinStr2.get(0).getCigaretteName();
+                           arrangement[i][j] = thinStr2.get(0).getCigaretteName()+"/"+ thinStr2.get(0).getCigaretteType() +"/"+ thinStr2.get(0).getPrice();
                            thinStr2.remove(0);
                        }else{
-                           arrangement[i][j] = thinStr1.get(0).getCigaretteName();
+//                           arrangement[i][j] = thinStr1.get(0).getCigaretteName();
+                           arrangement[i][j] = thinStr1.get(0).getCigaretteName()+"/"+ thinStr1.get(0).getCigaretteType() +"/"+ thinStr1.get(0).getPrice();
                            thinStr1.remove(0);
                        }
                    }
